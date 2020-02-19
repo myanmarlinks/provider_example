@@ -1,3 +1,4 @@
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:provider_example/network/model/task_model.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart' hide Headers;
@@ -11,6 +12,7 @@ abstract class ApiService {
   static ApiService create() {
     final dio = Dio();
     dio.options.headers["Content-Type"] = "application/json";
+    dio.interceptors.add(PrettyDioLogger());
     return ApiService(dio);
   }
 

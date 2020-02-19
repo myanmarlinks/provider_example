@@ -40,11 +40,12 @@ class SecondHome extends StatelessWidget {
     return ListView.builder(
       itemCount: tasks.length,
         itemBuilder: (BuildContext context, int index) {
+        final image = tasks[index].avatar;
         return Card(
           child: ListTile(
-            trailing: Image.network(tasks[index].avatar),
+            leading: image == null ? Image.network("https://megamyanmarlink.com/apple-icon-60x60.png"): Image.network(image),
             title: Text("${tasks[index].name}"),
-            subtitle: Text("${tasks[index].id}"),
+            subtitle: Text("${tasks[index].id.toString()}"),
           ),
         );
      }

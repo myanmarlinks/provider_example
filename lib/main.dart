@@ -6,15 +6,27 @@ import 'package:provider_example/inject/network_provider.dart';
 import 'package:provider_example/inject/notify_object.dart';
 import 'package:provider_example/inject/simple_model.dart';
 import 'package:provider_example/network/api_service.dart';
+import 'package:logging/logging.dart';
+import 'package:provider_example/ui/second_home.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  _setupLogging();
+  runApp(MyApp());
+}
+
+void _setupLogging() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((rec) => {
+    print("${rec.level.name}: ${rec.time} : ${rec.message}")
+  });
+}
+
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-
         Provider<SimpleModel>(
           create: (context) => SimpleModel(),
         ),
@@ -120,7 +132,7 @@ class MyApp extends StatelessWidget {
                     ),
                   );
                 },
-              )
+              ),
 
             ]),
           ),
@@ -147,16 +159,19 @@ class ApiButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final api = Provider.of<ApiService>(context, listen: false);
+//    final api = Provider.of<ApiService>(context, listen: false);
     return FloatingActionButton.extended(
-        onPressed: () async {
-            api.getTasks().then((it) {
-              it.forEach((f) {
-                print("ID : ${f.id}, Name : ${f.name}");
-              });
-            }).catchError((onError) {
-              print(onError.toString());
-            });
+      heroTag: "btn1",
+        onPressed: ()  {
+
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SecondHome()));
+//            api.getTasks().then((it) {
+//              it.forEach((f) {
+//                print("ID : ${f.id}, Name : ${f.name}");
+//              });
+//            }).catchError((onError) {
+//              print(onError.toString());
+//            });
 
         },
         icon: Icon(Icons.done),
@@ -174,6 +189,7 @@ class ActionButton extends StatelessWidget {
     final notifyObject = Provider.of<NotifyObject>(context, listen: false);
     print("Action Button Built");
     return FloatingActionButton.extended(
+      heroTag: "btn2",
         onPressed: () {
           notifyObject.increase();
         },
